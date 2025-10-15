@@ -56,4 +56,18 @@ test.describe("Pruebas de Login para SauceDemo", () => {
       /sl-404/
     );
   });
+
+  test('El login con "performance_glitch_user" funciona correctamente pese a la lentitud', async ({ page }) => {
+    
+    // Aumento del timeout debido al tiempo de carga de la página
+    test.slow();
+
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login('performance_glitch_user', 'secret_sauce');
+
+    
+    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
+    await expect(page.locator('.title')).toHaveText('Products');
+  });
 });
